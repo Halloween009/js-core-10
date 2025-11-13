@@ -59,11 +59,13 @@ async function searchRepositories(search) {
     console.log(error);
   }
 }
-inputMenu.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    searchRepositories(e.target.value);
-  }
-});
+function debounce(e, ms) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => e.apply(this, args), ms);
+  };
+}
 
 inputMenu.addEventListener("blur", () => {
   setTimeout(() => {
@@ -75,6 +77,11 @@ inputMenu.addEventListener("focus", () => {
   if (autoComplete.children.length > 0) {
     autoComplete.style.display = "block";
   }
+});
+
+const debounceInput = debounce(searchRepositories, 500);
+inputMenu.addEventListener("input", (e) => {
+  debounceInput(e.target.value);
 });
 
 const repoList = document.createElement("div");
