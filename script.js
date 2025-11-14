@@ -81,6 +81,10 @@ inputMenu.addEventListener("focus", () => {
 
 const debounceInput = debounce(searchRepositories, 500);
 inputMenu.addEventListener("input", (e) => {
+  if (!e.target.value.trim()) {
+    autoComplete.innerHTML = "";
+    autoComplete.style.display = "none";
+  }
   debounceInput(e.target.value);
 });
 
